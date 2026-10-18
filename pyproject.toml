@@ -9,15 +9,19 @@ authors = [
 requires-python = ">=3.10"
 dependencies = [
     "certifi>=2026.7.22",
+    "dagshub>=0.7.3",
     "dill>=0.4.1",
+    "fastapi>=0.143.0",
     "mlflow>=3.17.1",
     "numpy>=2.2.6",
     "pandas>=2.3.3",
     "pymongo>=4.18.1",
     "python-dotenv>=1.2.3",
+    "python-multipart>=0.0.32",
     "pyyaml>=6.0.3",
     "scikit-learn>=1.7.2",
     "setuptools>=84.0.0",
+    "uvicorn>=0.54.0",
 ]
 
 [project.scripts]

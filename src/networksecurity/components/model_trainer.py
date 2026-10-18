@@ -1,6 +1,6 @@
 import os
 import sys
-
+import tempfile
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging. logger import logging
 
@@ -19,6 +19,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier,AdaBoostClassifier
 import mlflow
 
+import dagshub
+dagshub.init(repo_owner='bhanutej930', repo_name='NerworkSecurity', mlflow=True)
+print(mlflow.get_tracking_uri())
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
@@ -33,13 +36,22 @@ class ModelTrainer:
             f1_score=classification_metric.f1_score
             presision_score=classification_metric.precision_score
             recall_score=classification_metric.recall_score
+            mlflow.log_text("Dagshub testing", "test/hello.txt")
 
             mlflow.log_metric("f1_score",f1_score)
             mlflow.log_metric("precision_score",presision_score)
             mlflow.log_metric("recall_score",recall_score)
+            with tempfile.TemporaryDirectory() as tmp:
+                model_path = os.path.join(tmp, "model")
+                mlflow.sklearn.save_model(
+                    best_model,
+                    model_path,
+                    skops_trusted_types=["sklearn.tree._tree.Tree"],
+                )
+                mlflow.log_artifacts(model_path, artifact_path="model")
             mlflow.sklearn.log_model(best_model,"model",skops_trusted_types=["sklearn.tree._tree.Tree"])
 
-    def train_model(self,X_train,y_train,x_test,y_test):
+    def train_model(self,X_train,y_train,x_test,y_test): 
         try:
             models={
                 "Random Forest": RandomForestClassifier(verbose=1),
@@ -91,6 +103,8 @@ class ModelTrainer:
 
             Network_Model=NetworkModel(preprocessor=preprocessor,model=best_model)
             save_object(self.model_trainer_config.trained_model_file_path,obj=Network_Model)
+
+            save_object("final_models/model.pkl",best_model)
 
             model_trainer_artifact=ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
                                 train_metric_artifact=classification_train_metric,

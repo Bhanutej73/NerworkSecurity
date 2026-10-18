@@ -11,3 +11,4 @@ wheels/
 src/.env
 uv.lock
 logs/
+Artifacts/
