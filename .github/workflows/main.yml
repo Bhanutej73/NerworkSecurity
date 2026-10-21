@@ -23,7 +23,7 @@ jobs:
 
     build-andpush-ecr-image:
         name: Continuous Delivery
-        needs: integration
+        needs: integrations
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
@@ -32,7 +32,7 @@ jobs:
             - name: Install Utilities
               run: |
                 sudo apt-get update
-                sudo apt get-install -y jq unzip
+                sudo apt-get install -y jq unzip
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
