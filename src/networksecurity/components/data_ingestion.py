@@ -10,10 +10,16 @@ from typing import List
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import load_dotenv,find_dotenv
+#load_dotenv(override=True)
 
+
+
+# path = find_dotenv()
+# print("Loading:", path)
+load_dotenv(r"C:\\Users\\bhanu\\Desktop\\MLOps-Learning\\NetworkSecurity\\src\\.env", override=True)
 MONGO_DB_URL = os.getenv("MONGO_DB_URL")
+print("URL:", MONGO_DB_URL)
 
 class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
