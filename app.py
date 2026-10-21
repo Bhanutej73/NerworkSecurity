@@ -20,7 +20,7 @@ from uvicorn import run as app_run
 from fastapi.responses import Response
 from starlette.responses import RedirectResponse
 import pandas as pd
-
+import uvicorn
 from networksecurity.utils.main_utils.utils import load_object
 
 from networksecurity.constants.training_pipeline import DATA_INGESTION_COLLECTION_NAME,DATA_INGESTION_DATABASE_NAME
@@ -80,4 +80,4 @@ async def predict_route(request:Request,file:UploadFile=File(...)):
         raise NetworkSecurityException(e,sys)
 
 if __name__=='__main__':
-    app.run(app,host="0.0.0.0",port=8000,debug=True)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
